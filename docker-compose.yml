@@ -1,0 +1,34 @@
+services:
+  app:
+    container_name: '${APP_NAME}'
+    build:
+      context: .
+      dockerfile: docker/app/Dockerfile
+    restart: on-failure:5
+    cpus: 0.2
+    mem_reservation: 64m
+    mem_limit: 128m
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${APP_NAME}.rule=Host(`${DOMAIN_NAME}`)"
+      - "traefik.http.routers.${APP_NAME}.entrypoints=web,websecure"
+      - "traefik.http.routers.${APP_NAME}.tls=true"
+      - "traefik.http.services.${APP_NAME}.loadbalancer.server.port=80"
+      - "traefik.http.routers.${APP_NAME}.tls.certresolver=cloudflare"
+      - "traefik.http.middlewares.${APP_NAME}-headers.headers.SSLRedirect=true"
+      - "traefik.http.middlewares.${APP_NAME}-headers.headers.STSSeconds=31536000"
+      - "traefik.http.middlewares.${APP_NAME}-headers.headers.browserXSSFilter=true"
+      - "traefik.http.middlewares.${APP_NAME}-headers.headers.contentTypeNosniff=true"
+      - "traefik.docker.network=traefik_external"
+    healthcheck:
+      test: ['CMD-SHELL', 'curl -f http://localhost:80/ || exit 1']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    networks:
+      - traefik_external
+
+networks:
+  traefik_external:
+    external: true

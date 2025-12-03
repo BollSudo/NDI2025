@@ -1,0 +1,13 @@
+services:
+  server:
+    container_name: node-dev
+    image: node:24-slim
+    restart: no
+    working_dir: /app
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./:/app
+    command: sh -c "npm install && npm run dev"
+    environment:
+      - NODE_ENV=development
