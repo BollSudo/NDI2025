@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<Props>(), {
 // Définition des événements que ce composant peut émettre
 const emit = defineEmits<{
   (e: 'finished'): void;
+  (e:'animation-complete'): void;
 }>();
 
 // État réactif du texte actuellement affiché

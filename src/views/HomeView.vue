@@ -13,7 +13,7 @@ const onAnimationComplete = () => {
 // --- Configuration des Diapositives (Slides) ---
 const slides = [
   "// BOOT SEQUENCE INITIEE...\n\nANNEE 2025. Le systeme scolaire est envahi par les dependances numeriques...\n\nPerte de controle. Obscurite. Epuisement des ressources.",
-  "UNE ANCIENNE PROPHETIE parlee de la demarche NIRD (Numerique Inclusif, Responsable et Durable).",
+  "UNE ANCIENNE PROPHETIE parle de la demarche NIRD (Numerique Inclusif, Responsable et Durable).",
   "NIRD est la cle. Elle promet autonomie, durabilite et equite. Mais le chemin est long. Il faut une carte. Il faut un GUIDE.",
   "BIENVENUE, HEROS. Ta mission est d'aider les etablissements a PASSER AU NIVEAU SUPERIEUR.\n\nEs-tu pret a debute ta quete ?"
 ];
@@ -64,7 +64,7 @@ const nextSlide = () => {
   if (currentSlideIndex.value >= totalSlides - 1) {
     isFinished.value = true;
     // Ici, vous pouvez ajouter la logique pour afficher le contenu principal de la HomeView
-    router.push('/hello')
+    onAnimationComplete()
     return;
   }
 
@@ -113,24 +113,26 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="w-screen">
+  <main>
   <!-- Le conteneur parent prend la taille de l'écran et centre son contenu. -->
-  <div class="min-h-screen w-full bg-black  text-gray-200 flex justify-center items-center">
+  <div v-if="!isFinished" class="min-h-screen w-full w-screen bg-black  text-gray-200 flex justify-center items-center">
 
     <!-- Contenu cinématique visible tant que isFinished est faux -->
     <!-- MODIFICATION CLÉ : Retrait de mx-auto et ajout de ml-12 mr-6 pour décaler vers la droite. -->
-    <div v-if="!isFinished" class="crt-screen  w-4/5 relative max-h-screen p-4 md:p-8 shadow-green-glow min-h-[50vh] flex flex-col justify-between rounded-lg bg-black/90 transition-all duration-700">
+    <div  class="crt-screen  w-4/5 relative max-h-screen p-4 md:p-8 shadow-green-glow min-h-[50vh] flex flex-col justify-between rounded-lg bg-black/90 transition-all duration-700">
 
       <!-- Section du contenu principal (l'histoire) -->
       <div id="intro-text" class="text-sm md:text-base lg:text-lg text-center leading-relaxed transition-opacity duration-500">
         <!-- Notre composant machine à écrire -->
         <Typewriter
+          v-if="!showNavbar"
           :text="currentTextForTypewriter"
           :typing-speed="40"
           @finished="handleTypingFinished"
-          @animation-complete="onAnimationComplete"
         />
+
       </div>
+
 
       <!-- Faux HUD Rétro Gaming (en bas) -->
       <!-- J'ai assuré que le HUD utilise des petites polices pour rester compact -->
@@ -161,12 +163,11 @@ onUnmounted(() => {
     </div>
 
     <!-- Contenu de l'application (Visible après la cinématique) -->
-    <div v-else class="text-white text-center">
-      <h1 class="text-4xl font-mono text-green-400 mb-4">ACCES AUTORISE.</h1>
-      <p class="text-xl">Le véritable contenu de l'application commence ici.</p>
-      <!-- Ici, vous mettrez le contenu réel de la HomeView -->
-    </div>
+
   </div>
+    <nav v-else>
+      <p>poznepfpeinfpezfpof,fpejoêkôaekdôakd</p>
+    </nav>
   </main>
 </template>
 
