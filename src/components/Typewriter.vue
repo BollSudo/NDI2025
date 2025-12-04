@@ -1,65 +1,64 @@
-<script>
-export default {
-  name: 'Typewriter',
-  props: {
-    texts: {
-      type: Array,
-      required: true,
-      default: () => ['Bienvenue dans le jeu', 'Préparez-vous à jouer', 'Appuyez pour commencer']
-    },
-    typingSpeed: { type: Number, default: 80 }, // ms par caractère
-    eraseSpeed: { type: Number, default: 40 },
-    pauseDuration: { type: Number, default: 2000 } // ms entre textes
-  },
-  data() {
-    return {
-      displayedText: '',
-      currentTextIndex: 0,
-      charIndex: 0,
-      isDeleting: false,
-      timeoutId: null
-    }
-  },
-  mounted() {
-    this.startAnimation()
-  },
-  beforeUnmount() {
-    if (this.timeoutId) clearTimeout(this.timeoutId)
-  },
-  methods: {
-    startAnimation() {
-      this.typeOrDelete()
-    },
-    typeOrDelete() {
-      const currentText = this.texts[this.currentTextIndex]
+<script setup lang="ts">
+import { ref, onMounted, onUnmounted } from 'vue'
 
-      if (!this.isDeleting) {
-        // Tape le texte
-        if (this.charIndex <= currentText.length) {
-          this.displayedText = currentText.slice(0, this.charIndex)
-          this.charIndex++
-          this.timeoutId = setTimeout(() => this.typeOrDelete(), this.typingSpeed)
-        } else {
-          // Pause avant effacement
-          this.timeoutId = setTimeout(() => {
-            this.isDeleting = true
-            this.typeOrDelete()
-          }, this.pauseDuration)
+const props = defineProps<{
+  texts: string[]
+  typingSpeed?: number
+  eraseSpeed?: number
+  pauseDuration?: number
+  loopCount?: number // Nouveau: nombre de boucles avant fin
+}>()
+
+const emit = defineEmits<{
+  (e: 'animation-complete'): void
+}>()
+
+const displayedText = ref('')
+const currentTextIndex = ref(0)
+const charIndex = ref(0)
+const isDeleting = ref(false)
+const timeoutId = ref<NodeJS.Timeout | null>(null)
+const loopCount = ref(0)
+const maxLoops = props.loopCount || 1
+
+onMounted(() => startAnimation())
+onUnmounted(() => {
+  if (timeoutId.value) clearTimeout(timeoutId.value)
+})
+
+const startAnimation = () => typeOrDelete()
+
+const typeOrDelete = () => {
+  const currentText = props.texts[currentTextIndex.value]
+
+  if (!isDeleting.value) {
+    if (charIndex.value <= currentText.length) {
+      displayedText.value = currentText.slice(0, charIndex.value)
+      charIndex.value++
+      timeoutId.value = setTimeout(typeOrDelete, props.typingSpeed || 80)
+    } else {
+      timeoutId.value = setTimeout(() => {
+        isDeleting.value = true
+        typeOrDelete()
+      }, props.pauseDuration || 2000)
+      return
+    }
+  } else {
+    if (charIndex.value > 0) {
+      displayedText.value = currentText.slice(0, charIndex.value - 1)
+      charIndex.value--
+      timeoutId.value = setTimeout(typeOrDelete, props.eraseSpeed || 40)
+    } else {
+      currentTextIndex.value = (currentTextIndex.value + 1) % props.texts.length
+      if (currentTextIndex.value === 0) {
+        loopCount.value++
+        if (loopCount.value >= maxLoops) {
+          emit('animation-complete')
           return
         }
-      } else {
-        // Efface le texte
-        if (this.charIndex > 0) {
-          this.displayedText = currentText.slice(0, this.charIndex - 1)
-          this.charIndex--
-          this.timeoutId = setTimeout(() => this.typeOrDelete(), this.eraseSpeed)
-        } else {
-          // Texte suivant
-          this.currentTextIndex = (this.currentTextIndex + 1) % this.texts.length
-          this.isDeleting = false
-          this.timeoutId = setTimeout(() => this.typeOrDelete(), 500)
-        }
       }
+      isDeleting.value = false
+      timeoutId.value = setTimeout(typeOrDelete, 500)
     }
   }
 }
