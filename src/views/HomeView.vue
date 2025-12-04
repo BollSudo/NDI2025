@@ -5,6 +5,11 @@ import Typewriter from '@/components/Typewriter.vue'; // Notre composant Typewri
 
 const router = useRouter()
 
+const showNavbar = ref(false)
+
+const onAnimationComplete = () => {
+  showNavbar.value = true
+}
 // --- Configuration des Diapositives (Slides) ---
 const slides = [
   "// BOOT SEQUENCE INITIEE...\n\nANNEE 2025. Le systeme scolaire est envahi par les dependances numeriques...\n\nPerte de controle. Obscurite. Epuisement des ressources.",
@@ -123,6 +128,7 @@ onUnmounted(() => {
           :text="currentTextForTypewriter"
           :typing-speed="40"
           @finished="handleTypingFinished"
+          @animation-complete="onAnimationComplete"
         />
       </div>
 

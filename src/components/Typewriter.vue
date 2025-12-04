@@ -46,6 +46,7 @@ const typeText = (text: string) => {
       isTyping.value = false;
       // 4. Notifier le parent que c'est fini
       emit('finished');
+      emit('animation-complete')
     }
   }, props.typingSpeed) as unknown as number;
 };
