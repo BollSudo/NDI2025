@@ -66,7 +66,7 @@ export default {
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white p-8">
+  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br  text-white p-8">
     <div class="text-center max-w-4xl mx-auto">
       <h1 class="text-5xl md:text-7xl font-bold font-mono tracking-wide mb-8 leading-tight">
         {{ displayedText }}
