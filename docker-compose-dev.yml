@@ -11,3 +11,49 @@ services:
     command: sh -c "npm install && npm run dev"
     environment:
       - NODE_ENV=development
+
+  backend:
+    container_name: backend
+    build:
+      context: ./docker/backend
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend:/app/backend
+    ports:
+      - "90:90"
+    working_dir: /app/backend
+    command: sh -c "composer install && composer update && symfony server:start --port=90 --no-tls --allow-all-ip"
+
+  database:
+    container_name: database
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ndi_root
+      MYSQL_DATABASE: ndi_db
+      MYSQL_USER: ndi_user
+      MYSQL_PASSWORD: ndi_password
+      TZ: "Europe/Paris"
+    ports:
+      - "82:3306"
+    volumes:
+      - database_data:/var/lib/mysql
+
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p ndi_root" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: database
+      MYSQL_ROOT_PASSWORD: ndi_root
+    ports:
+      - "81:80"
+    depends_on:
+      - database
+
+volumes:
+  database_data:
