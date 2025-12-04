@@ -22,7 +22,7 @@ services:
     ports:
       - "90:90"
     working_dir: /app/backend
-    command: sh -c "composer install && composer update && symfony server:start --port=90 --no-tls --allow-all-ip"
+    command: sh -c "symfony server:stop && composer install && composer update && symfony server:start --port=90 --no-tls --allow-all-ip"
 
   database:
     container_name: database
