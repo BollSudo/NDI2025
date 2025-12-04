@@ -1,80 +1,99 @@
-<script>
-export default {
-  name: 'Typewriter',
-  props: {
-    texts: {
-      type: Array,
-      required: true,
-      default: () => ['Bienvenue dans le jeu', 'Préparez-vous à jouer', 'Appuyez pour commencer']
-    },
-    typingSpeed: { type: Number, default: 80 }, // ms par caractère
-    eraseSpeed: { type: Number, default: 40 },
-    pauseDuration: { type: Number, default: 2000 } // ms entre textes
-  },
-  data() {
-    return {
-      displayedText: '',
-      currentTextIndex: 0,
-      charIndex: 0,
-      isDeleting: false,
-      timeoutId: null
-    }
-  },
-  mounted() {
-    this.startAnimation()
-  },
-  beforeUnmount() {
-    if (this.timeoutId) clearTimeout(this.timeoutId)
-  },
-  methods: {
-    startAnimation() {
-      this.typeOrDelete()
-    },
-    typeOrDelete() {
-      const currentText = this.texts[this.currentTextIndex]
+<script setup lang="ts">
+import { ref, watch, onUnmounted } from 'vue';
 
-      if (!this.isDeleting) {
-        // Tape le texte
-        if (this.charIndex <= currentText.length) {
-          this.displayedText = currentText.slice(0, this.charIndex)
-          this.charIndex++
-          this.timeoutId = setTimeout(() => this.typeOrDelete(), this.typingSpeed)
-        } else {
-          // Pause avant effacement
-          this.timeoutId = setTimeout(() => {
-            this.isDeleting = true
-            this.typeOrDelete()
-          }, this.pauseDuration)
-          return
-        }
-      } else {
-        // Efface le texte
-        if (this.charIndex > 0) {
-          this.displayedText = currentText.slice(0, this.charIndex - 1)
-          this.charIndex--
-          this.timeoutId = setTimeout(() => this.typeOrDelete(), this.eraseSpeed)
-        } else {
-          // Texte suivant
-          this.currentTextIndex = (this.currentTextIndex + 1) % this.texts.length
-          this.isDeleting = false
-          this.timeoutId = setTimeout(() => this.typeOrDelete(), 500)
-        }
-      }
-    }
-  }
+// Définition des props
+interface Props {
+  text: string; // Prend un seul texte à la fois
+  typingSpeed?: number; // Vitesse en ms par caractère
 }
+const props = withDefaults(defineProps<Props>(), {
+  typingSpeed: 40,
+});
+
+// Définition des événements que ce composant peut émettre
+const emit = defineEmits<{
+  (e: 'finished'): void;
+}>();
+
+// État réactif du texte actuellement affiché
+const displayedText = ref('');
+// État pour savoir si la frappe est en cours
+const isTyping = ref(false);
+let typingInterval: number | null = null;
+
+// --- Logique de la Machine à Écrire ---
+
+const typeText = (text: string) => {
+  // 1. Réinitialiser et nettoyer
+  if (typingInterval !== null) {
+    clearInterval(typingInterval);
+  }
+  displayedText.value = '';
+  isTyping.value = true;
+  let i = 0;
+
+  typingInterval = setInterval(() => {
+    if (i < text.length) {
+      // 2. Ajouter le caractère suivant
+      displayedText.value += text.charAt(i);
+      i++;
+    } else {
+      // 3. Fin de la frappe
+      if (typingInterval !== null) {
+        clearInterval(typingInterval);
+        typingInterval = null;
+      }
+      isTyping.value = false;
+      // 4. Notifier le parent que c'est fini
+      emit('finished');
+    }
+  }, props.typingSpeed) as unknown as number;
+};
+
+// --- Watcher ---
+
+// Si le texte de la prop change, redémarrer l'animation
+watch(() => props.text, (newText) => {
+  if (newText) {
+    typeText(newText);
+  }
+}, { immediate: true });
+
+// Nettoyage lors de la destruction du composant
+onUnmounted(() => {
+  if (typingInterval !== null) {
+    clearInterval(typingInterval);
+  }
+});
 </script>
 
 <template>
-  <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 to-black text-white p-8">
-    <div class="text-center max-w-4xl mx-auto">
-      <h1 class="text-5xl md:text-7xl font-bold font-mono tracking-wide mb-8 leading-tight">
-        {{ displayedText }}
-        <span class="inline-block w-4 h-12 bg-gradient-to-r from-blue-400 to-purple-500 animate-pulse ml-1">|</span>
-      </h1>
-    </div>
+  <!-- Le contenu de ce composant est minimal, le style d'écran est dans HomeView -->
+  <div class="whitespace-pre-wrap text-sm md:text-lg leading-relaxed text-center">
+    <!-- Utilisation de la prop 'text' pour afficher le texte caractère par caractère -->
+    {{ displayedText }}
+
+    <!-- Curseur clignotant, visible uniquement pendant la frappe -->
+    <span
+      v-if="isTyping"
+      class="inline-block w-2 h-4 md:w-3 md:h-6 bg-green-500 ml-1 align-bottom animate-pulse"
+    ></span>
   </div>
 </template>
 
 <style scoped>
+/* Le whitespace-pre-wrap est crucial pour respecter les \n dans le texte */
+.whitespace-pre-wrap {
+  white-space: pre-wrap;
+}
+
+/* L'animation de clignotement pour le curseur */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-pulse {
+  animation: pulse 1s infinite;
+}
 </style>
