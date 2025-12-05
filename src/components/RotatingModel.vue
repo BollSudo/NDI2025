@@ -107,12 +107,8 @@ function loadModel() {
       })
 
       scene.add(model)
-      console.log('Model loaded successfully')
     },
-    (progress) => {
-      const percentComplete = (progress.loaded / progress.total) * 100
-      console.log(`Loading: ${percentComplete.toFixed(2)}%`)
-    },
+    () => {},
     (error) => {
       console.error('Error loading model:', error)
     },
@@ -122,7 +118,6 @@ function loadModel() {
 function animate() {
   animationFrameId = requestAnimationFrame(animate)
 
-  // Rotate model if exists
   if (model && props.rotationSpeed > 0) {
     model.rotation.y += props.rotationSpeed
   }

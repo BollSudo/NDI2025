@@ -18,7 +18,7 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex flex-col items-center gap-2 w-full py-4">
+  <div class="flex flex-col items-center gap-2 w-full py-4 px-4">
     <div class="text-5xl mb-4 w-50 h-50">
       <Suspense>
         <RotatingModel
