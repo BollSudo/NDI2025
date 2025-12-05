@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue';
+import CircularNavbar from '@/components/CircularNavbar.vue'
 
 const fileInput = ref<HTMLInputElement | null>(null);
 const audioPlayer = ref<HTMLAudioElement | null>(null);
@@ -253,6 +254,7 @@ function drawSpiral(dataArray: Uint8Array, centerX: number, centerY: number) {
 </script>
 
 <template>
+  <circular-navbar />
   <div class="audio-container">
     <div class="header">
       <h1 class="title">Visualiseur Audio Rétro</h1>
