@@ -13,6 +13,7 @@ import { IconoirProvider } from '@iconoir/vue'
     }"
   />
   <RouterView />
+
 </template>
 
 <style scoped>
