@@ -2,7 +2,7 @@
   <div
     class="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white flex flex-col gap-2 items-center justify-center"
   >
-    <section id="pillars" class="w-full min-h-screen pt-12">
+    <section id="pillars" class="py-12">
       <div class="container px-6">
         <h2 class="text-4xl font-bold text-center mb-16">Les piliers</h2>
         <div class="grid md:grid-cols-3 gap-8">
@@ -17,7 +17,7 @@
       </div>
     </section>
 
-    <section id="solutions" class="w-full pt-6">
+    <section id="solutions" class="py-12">
       <div class="container px-6">
         <h2 class="text-4xl font-bold text-center mb-16">Les solutions</h2>
         <div class="w-full flex flex-wrap gap-2 items-center justify-center">
@@ -54,7 +54,7 @@
       </div>
     </section>
 
-    <section id="cibles" class="pt-12 pb-6">
+    <section id="cibles" class="py-12">
       <h2 class="text-4xl font-bold text-center mb-16">Les acteurs</h2>
       <SlidingCard />
     </section>

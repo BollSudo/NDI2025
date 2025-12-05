@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import { Medal } from '@iconoir/vue'
 import CircularNavbar from '@/components/CircularNavbar.vue'
 
 const quizQuestions = ref([
@@ -28,6 +29,33 @@ const quizQuestions = ref([
       { text: 'Mixte cloud/local', score: 50 },
       { text: 'Majoritairement local', score: 75 },
       { text: 'Tout en local', score: 100 },
+    ],
+  },
+  {
+    text: 'Dans quelle mesure vos équipes sont-elles formées aux enjeux du numérique responsable ?',
+    options: [
+      { text: 'Aucune formation spécifique', score: 0 },
+      { text: 'Quelques sensibilisations ponctuelles', score: 33 },
+      { text: 'Programme de formation régulier', score: 66 },
+      { text: 'Plan de formation structuré pour tout le personnel', score: 100 },
+    ],
+  },
+  {
+    text: 'Quel niveau de maîtrise avez-vous sur vos outils numériques (configuration, données, mises à jour) ?',
+    options: [
+      { text: 'Tout est géré par des prestataires externes', score: 0 },
+      { text: 'Nous dépendons majoritairement d’éditeurs/provideurs externes', score: 33 },
+      { text: 'Nous gérons une partie des outils et configurations en interne', score: 66 },
+      { text: 'Nous maîtrisons l’essentiel de nos outils et de nos données en interne', score: 100 },
+    ],
+  },
+  {
+    text: 'Intégrez-vous des critères d’inclusion et d’accessibilité dans le choix de vos outils numériques ?',
+    options: [
+      { text: 'Non, ce n’est pas encore pris en compte', score: 0 },
+      { text: 'Occasionnellement, selon les projets', score: 33 },
+      { text: 'Régulièrement, pour une partie des outils', score: 66 },
+      { text: 'Systématiquement, comme critère majeur de décision', score: 100 },
     ],
   },
 ])
@@ -72,13 +100,13 @@ function updateScore(questionIndex: number, score: number) {
       <div class="container max-w-4xl">
         <h2 class="text-4xl font-bold text-center mb-6">Calculez Votre Niveau d'Autonomie</h2>
         <p class="text-center text-gray-400 mb-12">
-          Répondez à ces questions pour évaluer votre progression NIRD
+          Répondez à ces questions pour évaluer votre progression
         </p>
 
         <div class="bg-white/5 backdrop-blur-lg rounded-2xl p-8 border border-white/10">
           <div class="space-y-6">
             <div v-for="(question, index) in quizQuestions" :key="index">
-              <p class="font-semibold mb-3">{{ question.text }}</p>
+              <p class="text-lg font-semibold mb-3">{{ question.text }}</p>
               <div class="space-y-2">
                 <label
                   v-for="(option, optIndex) in question.options"
@@ -102,7 +130,15 @@ function updateScore(questionIndex: number, score: number) {
             class="mt-8 p-6 bg-gradient-to-r from-blue-900/50 to-green-900/50 rounded-xl border border-blue-500/30 flex items-center"
           >
             <div class="flex-1">
-              <h4 class="font-bold text-lg mb-2">🎯 Votre Profil: {{ getProfileLevel }}</h4>
+              <div class="flex gap-2 items-center">
+                <Medal />
+                <h4 class="font-bold text-2xl mb-2">Niveau : <span class="text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500">
+  {{ getProfileLevel }}
+</span>
+
+
+                </h4>
+              </div>
               <p class="text-sm text-gray-300">{{ getProfileDescription }}</p>
             </div>
             <div

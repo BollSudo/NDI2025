@@ -54,11 +54,8 @@ onMounted(() => {
     '/assets/models/computers.glb',
     (gltf) => {
       scene.add(gltf.scene)
-      console.log('Model loaded:', gltf)
     },
-    (progress) => {
-      console.log(`Loading: ${(progress.loaded / progress.total) * 100}%`)
-    },
+    () => {},
     (error) => {
       console.error('Error loading model:', error)
     },
