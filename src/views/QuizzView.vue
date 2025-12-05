@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
+import CircularNavbar from '@/components/CircularNavbar.vue'
 
 const quizQuestions = ref([
   {
@@ -62,6 +63,7 @@ function updateScore(questionIndex: number, score: number) {
 </script>
 
 <template>
+  <circular-navbar />
   <div class="w-screen overflow-x-hidden flex items-center">
     <section
       id="form"
