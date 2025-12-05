@@ -142,7 +142,7 @@ const containerStyle = computed(() => ({
         <div
           v-if="isExpanded"
           @click="toggleMenu"
-          class="fixed inset-0 bg-black/70 backdrop-blur-sm pointer-events-auto navbar-overlay"
+          class="fixed inset-0 pointer-events-auto navbar-overlay"
         ></div>
       </transition>
 
