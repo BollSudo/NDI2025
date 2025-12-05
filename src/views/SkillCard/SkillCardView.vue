@@ -1,10 +1,10 @@
 <script setup lang="ts">
 
-import SkillCardNav from '@/components/SkillCardNav.vue'
+import Nav from '@/components/SkillCard/Nav.vue'
 </script>
 
 <template>
-  <SkillCardNav />
+  <Nav />
 </template>
 
 <style scoped>

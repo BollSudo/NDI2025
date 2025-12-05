@@ -3,49 +3,91 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Patch;
 use App\Repository\UserRepository;
+use App\State\UserProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\Post;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity('email', 'phoneNumber')]
-#[ApiResource]
-class User
+#[ApiResource(
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Post(validationContext: ["groups" => ["Default", "validation:user:create"]],
+            processor: UserProcessor::class),
+        new Patch(validationContext: ["groups" => ["Default", "validation:user:update"]],
+            processor: UserProcessor::class)
+    ],
+    normalizationContext: ["groups" => ["serialization:user:read", "serialization:user:create", "serialization:user:update"]],
+)]
+class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    #[Groups(['serialization:user:read', 'serialization:user:create'])]
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(['serialization:user:read'])]
     #[ORM\Column(length: 255)]
+    private ?string $password = null;
+
+    #[Groups(['serialization:user:create', 'serialization:user:update'])]
     #[Assert\Length(
         min: 12,
         max: 255,
-        minMessage: "Le mot de passe ne peut pas être plus grand que 255 caractères",
-        maxMessage: "Le mot de passe doit contenir au moins 12 caractères")]
+        minMessage: "Le mot de passe doit contenir au moins 12 caractères",
+        maxMessage: "Le mot de passe ne peut pas être plus grand que 255 caractères"
+    )]
     #[Assert\Regex(
         pattern: '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{12,255}$/',
         message: 'Le mot de passe doit contenir : 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial (12-255 caractères)'
     )]
-    private ?string $password = null;
+    #[Assert\NotBlank(groups: ["validation:user:create"])]
+    #[Assert\NotNull(groups: ["validation:user:create"])]
+    private ?string $plainPassword = null;
 
+    #[Groups(['serialization:user:read', 'serialization:user:create'])]
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(groups: ["validation:user:create"])]
+    #[Assert\NotNull(groups: ["validation:user:create"])]
     private ?string $name = null;
 
+    #[Groups(['serialization:user:read', 'serialization:user:create'])]
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(groups: ["validation:user:create"])]
+    #[Assert\NotNull(groups: ["validation:user:create"])]
     private ?string $firstName = null;
 
+    #[Groups(['serialization:user:read', 'serialization:user:create'])]
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $birthdate = null;
 
+    #[Groups(['serialization:user:read', 'serialization:user:create'])]
     #[ORM\Column(name: 'email', type: 'string', length: 255, unique: true)]
     #[Assert\Email]
+    #[Assert\NotBlank(groups: ["validation:user:create"])]
+    #[Assert\NotNull(groups: ["validation:user:create"])]
     private ?string $email = null;
 
+    #[Groups(['serialization:user:read', 'serialization:user:create'])]
     #[ORM\Column(name: 'phoneNumber', type: 'string', length: 25, unique: true, nullable: true)]
     private ?string $phoneNumber = null;
+
+    #[Groups(['serialization:user:read', 'serialization:user:create'])]
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
 
     public function getId(): ?int
     {
@@ -123,4 +165,41 @@ class User
 
         return $this;
     }
+
+    public function getUserIdentifier(): string
+    {
+        return $this->getEmail();
+    }
+
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
+        return $this;
+    }
+
+    public function eraseCredentials(): void
+    {
+        $this->plainPassword = null;
+    }
+
+
 }

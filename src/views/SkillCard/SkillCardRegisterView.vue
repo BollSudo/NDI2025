@@ -1,7 +1,7 @@
 
 <script setup lang="ts">
 import { ref, computed, reactive } from 'vue'
-import SkillCardNav from '@/components/SkillCardNav.vue'
+import Nav from '@/components/SkillCard/Nav.vue'
 import axios from 'axios'
 import router from '@/router'
 const submitting = ref(false)
@@ -153,22 +153,20 @@ async function submit() {
   try {
     const payload = {
       email: form.email,
-      password: form.password,
+      plainPassword: form.password,
       name: form.name,
       firstName: form.firstName,
       phoneNumber: form.phoneNumber || null,  // null si vide
       birthdate: form.birthdate || null,      // null si vide
     }
 
-    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/user`, payload, {
+    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/users`, payload, {
       headers: { 'Content-Type': 'application/json' }
     })
 
     success.value = true
     setTimeout(() => router.push('/skill_card/login'), 1500)
   } catch (err: any) {
-    console.log('Erreur complète:', err.response?.data) // Debug
-
     // ✅ MESSAGE GÉNÉRAL (ex: "Cet email est déjà utilisé.")
     if (err.response?.data?.message) {
       serverError.value = err.response.data.message
@@ -200,7 +198,7 @@ async function submit() {
 
 
 <template>
-  <SkillCardNav />
+  <Nav />
   <div class="flex items-center justify-center w-full">
     <form @submit.prevent="handleSubmit" class="w-full max-w-lg bg-white rounded-2xl shadow-xl p-10">
       <h1 class="text-3xl font-semibold text-green-700 mb-10 text-center">
