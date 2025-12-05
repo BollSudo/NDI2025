@@ -1,20 +1,17 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+import { RouterView } from 'vue-router'
+import { IconoirProvider } from '@iconoir/vue';
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
-  </header>
-
+  <IconoirProvider
+    :icon-props="{
+      'color': '#AAAAAA',
+      'stroke-width': 1,
+      'width': '1em',
+      'height': '1em',
+    }"
+  />
   <RouterView />
 </template>
 
