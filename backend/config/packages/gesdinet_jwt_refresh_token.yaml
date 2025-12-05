@@ -7,6 +7,6 @@ gesdinet_jwt_refresh_token:
   cookie:
     enabled: true
     #Afin que le token ne soit envoyé que sur les sous-routes /the_feed_api/public/api/token...
-    path: /localhost:90/api/token
+    path: /api/token
 
   logout_firewall: main

@@ -3,6 +3,7 @@ import Nav from '@/components/SkillCard/Nav.vue'
 import { computed, reactive, ref } from 'vue'
 import axios from 'axios'
 import router from '@/router'
+import { userData } from '@/assets/userData.ts'
 
 const submitting = ref(false)
 const showPassword = ref(false)
@@ -31,13 +32,15 @@ async function submit() {
       email: form.email,
       password: form.password,
     }
-    await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth`, payload, {
+    const response = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/auth`, payload, {
       headers: { 'Content-Type': 'application/json' },
+      withCredentials: true,
     })
+    userData.email = response.data.email
+    userData.firstName = response.data.firstName
+    userData.token_exp = response.data.token_exp
     setTimeout(() => router.push('/skill_card'), 1500)
   } catch (err: any) {
-    console.log('Erreur complète:', err.response?.data) // Debug
-
     // ✅ MESSAGE GÉNÉRAL (ex: "Cet email est déjà utilisé.")
     if (err.response?.data?.message) {
       serverError.value = err.response.data.message
