@@ -17,12 +17,13 @@ const dragStart = ref({ x: 0, y: 0 })
 const initialPosition = ref(getInitialPosition())
 
 const navItems = [
-  { id: 1, label: 'ACCUEIL', route: '/', icon: '🏠' },
-  { id: 2, label: 'DIAGNOSTIC', route: '/diagnostic', icon: '📊' },
-  { id: 3, label: 'GUIDES', route: '/guides', icon: '📖' },
-  { id: 4, label: 'RESSOURCES', route: '/ressources', icon: '💎' },
-  { id: 5, label: 'COMMUNAUTE', route: '/communaute', icon: '👥' },
-  { id: 6, label: 'PROFIL', route: '/profil', icon: '⚙️' },
+  { id: 1, label: 'Accueil', route: '/', icon: '🏠' },
+  { id: 2, label: 'Cours', route: '/cours', icon: '📖' },
+  { id: 3, label: 'Quizz', route: '/quizz', icon: '📊' },
+  { id: 4, label: 'Chatbot', route: '/chatbot', icon: '👥' },
+  { id: 5, label: 'Audio', route: '/audio', icon: '🎧' },
+  { id: 6, label: 'Carte des Talents', route: '/carte', icon: '👤' },
+  { id: 7,label: 'Random', route: '/random', icon: '💎' },
 ]
 
 const toggleMenu = () => {

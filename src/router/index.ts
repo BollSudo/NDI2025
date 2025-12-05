@@ -1,16 +1,21 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
+import ThreeView from '../views/ThreeView.vue'
+import QuizzView from '@/views/QuizzView.vue'
 import ChatBot from '../views/ChatbotView.vue'
-import AboutView from '@/views/AboutView.vue'
-import HelloWorld from '@/components/HelloWorld.vue'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
-  { path: '/hello', name: 'hello', component: HelloWorld },
-  { path: '/about', name: 'about', component: AboutView },
-  {path: '/chatbot', name: 'chatbot', component: ChatBot}
-
+  {path: '/cours', name: 'cours', component: ThreeView },
+  {path: '/quizz', name: 'quizz', component: QuizzView},
+  {path: '/chatbot', name: 'chatbot', component: ChatBot},
+  {path: '/random', name: 'random', redirect: () => {
+      const availableRoutes = routes.filter(r => r.path !== '/random');
+      const randomIndex = Math.floor(Math.random() * availableRoutes.length);
+      return availableRoutes[randomIndex].path;
+    }
+  }
 ]
 
 const router = createRouter({
