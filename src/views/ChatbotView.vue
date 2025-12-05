@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { Mistral } from '@mistralai/mistralai'
 import CircularNavbar from '@/components/CircularNavbar.vue'
 
@@ -7,6 +7,10 @@ interface Message {
   role: 'system' | 'user' | 'assistant'
   content: string
 }
+
+// États de l'orc
+type OrcState = 'idle' | 'talking' | 'thinking'
+const orcState = ref<OrcState>('idle')
 
 const messages = ref<Message[]>([
   {
@@ -28,6 +32,29 @@ const isLoading = ref(false)
 // Initialiser le client
 const apiKey = import.meta.env.VITE_MISTRAL_API_KEY || ''
 const client = new Mistral({ apiKey })
+
+// Computed pour sélectionner le bon GIF
+const orcGif = computed(() => {
+  const gifs = {
+    idle: 'assets/orc/orc_idle.png',
+    talking: 'assets/orc/orc_talking.gif',
+    thinking: 'assets/orc/orc_thinking.gif'
+  }
+  return gifs[orcState.value]
+})
+
+// Watcher pour changer l'état quand isLoading change
+watch(isLoading, (newVal) => {
+  if (newVal) {
+    orcState.value = 'thinking'
+  } else if (messages.value[messages.value.length - 1]?.role === 'assistant') {
+    orcState.value = 'talking'
+    // Retour à idle après 3 secondes
+    setTimeout(() => {
+      orcState.value = 'idle'
+    }, 3000)
+  }
+})
 
 const handleSubmit = async () => {
   if (!userInput.value.trim() || isLoading.value) return
@@ -63,15 +90,23 @@ const handleSubmit = async () => {
 <template>
   <circular-navbar />
   <div class="chat-container">
-    <div class="messages">
-      <div
-        v-for="(msg, index) in messages.filter((m) => m.role !== 'system')"
-        :key="index"
-        :class="['message', msg.role]"
-      >
-        <strong>{{ msg.role === 'assistant' ? 'Chuhrblozz' : msg.role }}:</strong> {{ msg.content }}
+    <div class="flex flex-row">
+      <div class="messages w-2/3">
+        <div
+          v-for="(msg, index) in messages.filter((m) => m.role !== 'system')"
+          :key="index"
+          :class="['message', msg.role]"
+        >
+          <strong>{{ msg.role === 'assistant' ? 'Chuhrblozz' : msg.role }}:</strong> {{ msg.content }}
+        </div>
+
+      </div>
+      <div class="img_orc w-1/3">
+        <img :src="orcGif" alt="Chuhrblozz" />
+        <span class="state-label"></span>
       </div>
     </div>
+
 
     <form @submit.prevent="handleSubmit" class="input-form">
       <input
@@ -89,8 +124,33 @@ const handleSubmit = async () => {
 
 
 <style scoped>
+.img_orc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #3b7a1a;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  margin-bottom: 20px;
+}
+
+.img_orc img {
+  width: 100%;
+  height: auto;
+  border: 2px solid #ffcc00;
+  box-shadow: 0 0 15px rgba(255, 204, 0, 0.3);
+}
+
+.state-label {
+  margin-top: 10px;
+  color: #ffcc00;
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
 .chat-container {
-  max-width: 900px;
+  width: 80vw ;
   margin: 0 auto;
   padding: 20px;
   background: linear-gradient(135deg, #1a2c1a 0%, #0d1b0d 100%);
