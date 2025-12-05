@@ -75,7 +75,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTime $birthdate = null;
 
-    #[Groups(['serialization:user:read', 'serialization:user:create'])]
+    #[Groups(['serialization:user:read', 'serialization:user:create', 'course:read'])]
     #[ORM\Column(name: 'email', type: 'string', length: 255, unique: true)]
     #[Assert\Email]
     #[Assert\NotBlank(groups: ["validation:user:create"])]

@@ -11,6 +11,7 @@ use App\Repository\CourseRepository;
 use App\State\CourseProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: CourseRepository::class)]
@@ -21,6 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Post(validationContext: ["groups" => ["Default", "validation:course:create"]], processor: CourseProcessor::class),
         new Patch(validationContext: ["groups" => ["Default", "validation:course:update"]])
     ],
+    normalizationContext: ["groups" => ["course:read"]],
 )]
 class Course
 {
@@ -29,21 +31,25 @@ class Course
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Groups(["course:read"])]
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(groups: ["validation:course:create"])]
     #[Assert\NotNull(groups: ["validation:course:create"])]
     private ?string $university_name = null;
 
+    #[Groups(["validation:course:create"])]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank(groups: ["validation:course:create"])]
     #[Assert\NotNull(groups: ["validation:course:create"])]
     private ?\DateTime $starting_year = null;
 
+    #[Groups(["course:read"])]
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     #[Assert\NotBlank(groups: ["validation:course:create"])]
     #[Assert\NotNull(groups: ["validation:course:create"])]
     private ?\DateTime $ending_date = null;
 
+    #[Groups(["course:read"])]
     #[ORM\Column(length: 255)]
     #[Assert\NotBlank(groups: ["validation:course:create"])]
     #[Assert\NotNull(groups: ["validation:course:create"])]
@@ -52,6 +58,7 @@ class Course
     #[ORM\Column(type: 'json', nullable: true)]
     private ?array $responsibilities = null;
 
+    #[Groups(["course:read"])]
     #[ORM\ManyToOne(inversedBy: 'courses')]
     #[Assert\NotBlank(groups: ["validation:course:update"])]
     #[Assert\NotNull(groups: ["validation:course:update"])]
