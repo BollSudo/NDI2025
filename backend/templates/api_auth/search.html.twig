@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Recherche Utilisateurs{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h1>🔍 Recherche d'utilisateurs</h1>
+
+        {# Barre de recherche #}
+        <div class="search-container mb-4">
+            <input
+                    type="text"
+                    id="searchInput"
+                    class="form-control form-control-lg"
+                    placeholder="Tapez un nom, email ou autre..."
+                    autocomplete="off"
+            >
+            <button id="searchBtn" class="btn btn-primary btn-lg mt-2">Rechercher</button>
+        </div>
+
+        {# Zone de chargement #}
+        <div id="loading" class="d-none text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Chargement...</span>
+            </div>
+        </div>
+
+        {# Résultats #}
+        <div id="results" class="mt-4"></div>
+    </div>
+
+    <style>
+        .search-container {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        #searchInput {
+            border-radius: 25px;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            border: 2px solid #ddd;
+        }
+        #searchInput:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+        }
+        .user-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            transition: box-shadow 0.3s;
+        }
+        .user-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+
+        // Recherche au clic
+        searchBtn.addEventListener('click', searchUsers);
+
+        // Recherche en temps réel (après 500ms d'inactivité)
+        let timeout;
+        searchInput.addEventListener('input', function() {
+          clearTimeout(timeout);
+          timeout = setTimeout(searchUsers, 500);
+        });
+
+        async function searchUsers() {
+          const query = searchInput.value.trim();
+          if (query.length < 2) {
+            results.innerHTML = '';
+            return;
+          }
+
+          loading.classList.remove('d-none');
+          results.innerHTML = '';
+
+          try {
+            // Appel API avec paramètre de recherche
+            const response = await fetch(`/api/users?page=1&q=${encodeURIComponent(query)}`);
+            const users = await response.json();
+
+            if (users['hydra:member'] && users['hydra:member'].length > 0) {
+              let html = `<h3>${users['hydra:member'].length} utilisateur(s) trouvé(s)</h3>`;
+              users['hydra:member'].forEach(user => {
+                html += `
+                        <div class="user-card">
+                            <h5>${user.username || user.email || 'Utilisateur'}</h5>
+                            <p class="mb-1"><strong>Email:</strong> ${user.email || 'N/A'}</p>
+                            ${user.roles ? `<p class="mb-0"><strong>Rôles:</strong> ${user.roles.join(', ')}</p>` : ''}
+                        </div>
+                    `;
+              });
+              results.innerHTML = html;
+            } else {
+              results.innerHTML = '<div class="alert alert-info">Aucun utilisateur trouvé pour "' + query + '"</div>';
+            }
+          } catch (error) {
+            results.innerHTML = '<div class="alert alert-danger">Erreur lors de la recherche</div>';
+            console.error('Erreur:', error);
+          } finally {
+            loading.classList.add('d-none');
+          }
+        }
+      });
+    </script>
+{% endblock %}
