@@ -445,6 +445,7 @@ function drawSpiral(dataArray: Uint8Array, centerX: number, centerY: number) {
   transform: translate(-50%, -50%);
   width: 150px;
   height: 150px;
+  padding: 30px 30px;
   border-radius: 50%;
   border: 5px solid rgba(255, 0, 255, 0.5);
   box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
@@ -463,8 +464,8 @@ function drawSpiral(dataArray: Uint8Array, centerX: number, centerY: number) {
   }
 
   .pulse-img {
-    width: 100px;
-    height: 100px;
+    width: 10px;
+    height: 10px;
   }
 }
 </style>

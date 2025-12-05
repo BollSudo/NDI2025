@@ -219,8 +219,8 @@ const containerStyle = computed(() => ({
 
 .central-orb {
   position: absolute;
-  top: 50%;
-  left: 50%;
+  top: 64%;
+  left: 64%;
   transform: translate(-50%, -50%);
   width: 90px;
   height: 90px;
@@ -278,6 +278,7 @@ const containerStyle = computed(() => ({
   display: block;
 }
 
+
 .orb-glow {
   position: absolute;
   inset: -8px;
@@ -327,8 +328,8 @@ const containerStyle = computed(() => ({
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 75px;
-  height: 75px;
+  width: 100px;
+  height: 100px;
   margin-top: -37.5px;
   margin-left: -37.5px;
   background: radial-gradient(circle at 30% 30%, #00ddff, #0088cc);
