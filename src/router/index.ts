@@ -5,6 +5,7 @@ import ThreeView from '../views/ThreeView.vue'
 import QuizzView from '@/views/QuizzView.vue'
 import ChatBot from '../views/ChatbotView.vue'
 import AudioView from '../views/AudioView.vue'
+import LegalView from '@/views/LegalView.vue'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
@@ -12,6 +13,7 @@ const routes = [
   {path: '/quizz', name: 'quizz', component: QuizzView},
   {path: '/chatbot', name: 'chatbot', component: ChatBot},
   {path: '/audio', name: 'audio', component: AudioView},
+  {path: '/legals', name: 'legals', component: LegalView},
   {path: '/random', name: 'random', redirect: () => {
       const availableRoutes = routes.filter(r => r.path !== '/random');
       const randomIndex = Math.floor(Math.random() * availableRoutes.length);

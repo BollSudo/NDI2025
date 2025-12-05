@@ -4,6 +4,9 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import ExploreNIRD from '@/components/ExploreNIRD.vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const container = ref<HTMLDivElement>()
 const showNextComponent = ref(false)
@@ -92,6 +95,10 @@ function animate() {
   renderer.render(scene, camera)
 }
 
+const navigateTo = (route: string) => {
+  router.push(route)
+}
+
 function onResize() {
   camera.aspect = window.innerWidth / window.innerHeight
   camera.updateProjectionMatrix()
@@ -146,4 +153,5 @@ onBeforeUnmount(() => {
       </div>
     </transition>
   </div>
+  <div class="fixed right-0 bottom-0"><button class="hover:underline" @click="navigateTo('legals')">Mentions Légales</button></div>
 </template>
