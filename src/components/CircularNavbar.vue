@@ -22,8 +22,7 @@ const navItems = [
   { id: 3, label: 'Quizz', route: '/quizz', icon: '📊' },
   { id: 4, label: 'Chatbot', route: '/chatbot', icon: '👥' },
   { id: 5, label: 'Audio', route: '/audio', icon: '🎧' },
-  { id: 6, label: 'Carte des Talents', route: '/carte', icon: '👤' },
-  { id: 7,label: 'Random', route: '/random', icon: '💎' },
+  { id: 6,label: 'Random', route: '/random', icon: '💎' },
 ]
 
 const toggleMenu = () => {
