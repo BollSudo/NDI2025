@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router'
-import Typewriter from '@/components/Typewriter.vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import CircularNavbar from '@/components/CircularNavbar.vue'
+import TypeWriter from '@/components/TypeWriter.vue'
 
 const showNavbar = ref(false)
 
@@ -12,85 +11,85 @@ const onAnimationComplete = () => {
 
 // --- Configuration des Diapositives (Slides) ---
 const slides = [
-  "// BOOT SEQUENCE INITIEE...\n\nANNEE 2025. Le systeme scolaire est envahi par les dependances numeriques...\n\nPerte de controle. Obscurite. Epuisement des ressources.",
-  "UNE ANCIENNE PROPHETIE parle de la demarche NIRD (Numerique Inclusif, Responsable et Durable).",
-  "NIRD est la cle. Elle promet autonomie, durabilite et equite. Mais le chemin est long. Il faut une carte. Il faut un GUIDE.",
-  "BIENVENUE, HEROS. Ta mission est d'aider les etablissements a PASSER AU NIVEAU SUPERIEUR.\n\nEs-tu pret a debute ta quete ?"
-];
-const totalSlides = slides.length;
+  '// BOOT SEQUENCE INITIEE...\n\nANNEE 2025. Le systeme scolaire est envahi par les dependances numeriques...\n\nPerte de controle. Obscurite. Epuisement des ressources.',
+  'UNE ANCIENNE PROPHETIE parle de la demarche NIRD (Numerique Inclusif, Responsable et Durable).',
+  'NIRD est la cle. Elle promet autonomie, durabilite et equite. Mais le chemin est long. Il faut une carte. Il faut un GUIDE.',
+  "BIENVENUE, HEROS. Ta mission est d'aider les etablissements a PASSER AU NIVEAU SUPERIEUR.\n\nEs-tu pret a debute ta quete ?",
+]
+const totalSlides = slides.length
 
 // --- États Réactifs ---
-const currentSlideIndex = ref(0);
-const isTyping = ref(true);
-const isFinished = ref(false);
+const currentSlideIndex = ref(0)
+const isTyping = ref(true)
+const isFinished = ref(false)
 
 // --- Computed Properties pour l'UI ---
-const currentTextForTypewriter = computed(() => slides[currentSlideIndex.value]);
+const currentTextForTypewriter = computed(() => slides[currentSlideIndex.value])
 
 const progressPercentage = computed(() => {
-  return ((currentSlideIndex.value + 1) / totalSlides) * 100;
-});
+  return ((currentSlideIndex.value + 1) / totalSlides) * 100
+})
 
 const instructionMessage = computed(() => {
   return currentSlideIndex.value < totalSlides - 1
-    ? "> APPUYER SUR [ESPACE] POUR CONTINUER <"
-    : "> APPUYER SUR [ESPACE] POUR ENTRER DANS L'APPLICATION <";
-});
+    ? '> APPUYER SUR [ESPACE] POUR CONTINUER <'
+    : "> APPUYER SUR [ESPACE] POUR ENTRER DANS L'APPLICATION <"
+})
 
 const showInstruction = computed(() => {
-  return !isTyping.value && !isFinished.value;
-});
+  return !isTyping.value && !isFinished.value
+})
 
 // --- Logique de Progression ---
 const handleTypingFinished = () => {
-  isTyping.value = false;
-};
+  isTyping.value = false
+}
 
 const nextSlide = () => {
   if (isTyping.value) {
-    return;
+    return
   }
 
   if (currentSlideIndex.value >= totalSlides - 1) {
-    isFinished.value = true;
+    isFinished.value = true
     onAnimationComplete()
-    return;
+    return
   }
 
-  currentSlideIndex.value++;
-  isTyping.value = true;
-};
+  currentSlideIndex.value++
+  isTyping.value = true
+}
 
 // --- Gestionnaire d'Événements Clavier ---
 const handleKeyPress = (event: KeyboardEvent) => {
   if (event.code === 'Space') {
-    event.preventDefault();
-    nextSlide();
+    event.preventDefault()
+    nextSlide()
   }
-};
+}
 
 // --- Gestion des Styles Globaux ---
-const CRT_FONT_CLASS = 'crt-active-font';
-const CRT_SCANLINES_CLASS = 'crt-active-scanlines';
-const CRT_FULLSCREEN_CLASS = 'crt-active-fullscreen';
+const CRT_FONT_CLASS = 'crt-active-font'
+const CRT_SCANLINES_CLASS = 'crt-active-scanlines'
+const CRT_FULLSCREEN_CLASS = 'crt-active-fullscreen'
 
 onMounted(() => {
-  window.addEventListener('keydown', handleKeyPress);
-  document.body.classList.add(CRT_FONT_CLASS, CRT_FULLSCREEN_CLASS);
-  const appElement = document.getElementById('app');
+  window.addEventListener('keydown', handleKeyPress)
+  document.body.classList.add(CRT_FONT_CLASS, CRT_FULLSCREEN_CLASS)
+  const appElement = document.getElementById('app')
   if (appElement) {
-    appElement.classList.add(CRT_SCANLINES_CLASS, CRT_FULLSCREEN_CLASS);
+    appElement.classList.add(CRT_SCANLINES_CLASS, CRT_FULLSCREEN_CLASS)
   }
-});
+})
 
 onUnmounted(() => {
-  window.removeEventListener('keydown', handleKeyPress);
-  document.body.classList.remove(CRT_FONT_CLASS, CRT_FULLSCREEN_CLASS);
-  const appElement = document.getElementById('app');
+  window.removeEventListener('keydown', handleKeyPress)
+  document.body.classList.remove(CRT_FONT_CLASS, CRT_FULLSCREEN_CLASS)
+  const appElement = document.getElementById('app')
   if (appElement) {
-    appElement.classList.remove(CRT_SCANLINES_CLASS, CRT_FULLSCREEN_CLASS);
+    appElement.classList.remove(CRT_SCANLINES_CLASS, CRT_FULLSCREEN_CLASS)
   }
-});
+})
 </script>
 
 <template>
@@ -101,11 +100,14 @@ onUnmounted(() => {
       class="fixed inset-0 bg-black text-gray-200 flex justify-center items-center overflow-hidden"
     >
       <!-- Conteneur CRT avec effet rétro -->
-      <div class="crt-screen w-full max-w-5xl mx-4 md:mx-8 relative p-6 md:p-12 shadow-green-glow min-h-[60vh] flex flex-col justify-between rounded-lg bg-black/90 border border-green-500/30">
-
+      <div
+        class="crt-screen w-full max-w-5xl mx-4 md:mx-8 relative p-6 md:p-12 shadow-green-glow min-h-[60vh] flex flex-col justify-between rounded-lg bg-black/90 border border-green-500/30"
+      >
         <!-- Section du contenu principal (l'histoire) -->
-        <div class="intro-text flex-1 flex items-center justify-center text-sm md:text-base lg:text-lg text-center leading-relaxed">
-          <Typewriter
+        <div
+          class="intro-text flex-1 flex items-center justify-center text-sm md:text-base lg:text-lg text-center leading-relaxed"
+        >
+          <TypeWriter
             v-if="!showNavbar"
             :text="currentTextForTypewriter"
             :typing-speed="40"
@@ -116,7 +118,9 @@ onUnmounted(() => {
         <!-- HUD Rétro Gaming (en bas) -->
         <div class="mt-8 text-xs md:text-sm pt-6 border-t border-green-700/50">
           <!-- Jauge de Progression -->
-          <div class="loading-bar-container w-full h-4 mb-3 rounded-sm overflow-hidden border-2 border-green-500 bg-gray-900/80">
+          <div
+            class="loading-bar-container w-full h-4 mb-3 rounded-sm overflow-hidden border-2 border-green-500 bg-gray-900/80"
+          >
             <div
               class="loading-bar-fill h-full bg-gradient-to-r from-green-500 to-green-400 transition-all duration-300 shadow-[0_0_10px_rgba(0,255,0,0.5)]"
               :style="{ width: `${progressPercentage}%` }"
@@ -133,7 +137,7 @@ onUnmounted(() => {
           <div
             :class="[
               'mt-6 text-center text-yellow-300 font-bold transition-opacity duration-300 text-shadow-glow-yellow',
-              { 'animate-pulse-slow': showInstruction, 'opacity-0': !showInstruction }
+              { 'animate-pulse-slow': showInstruction, 'opacity-0': !showInstruction },
             ]"
           >
             {{ instructionMessage }}
@@ -185,7 +189,8 @@ onUnmounted(() => {
 }
 
 @keyframes slow-pulse {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
@@ -201,7 +206,8 @@ onUnmounted(() => {
 }
 
 @keyframes progress-shimmer {
-  0%, 100% {
+  0%,
+  100% {
     filter: brightness(1);
   }
   50% {
@@ -268,12 +274,12 @@ body.crt-active-fullscreen,
   z-index: 9999;
 
   /* Aberration chromatique subtile */
-  background:
-    linear-gradient(90deg,
+  background: linear-gradient(
+    90deg,
     rgba(255, 0, 0, 0.03),
     rgba(0, 255, 0, 0.02),
     rgba(0, 0, 255, 0.03)
-    );
+  );
   background-size: 3px 100%;
 
   /* Vignette sombre sur les bords */
@@ -287,17 +293,19 @@ body.crt-active-fullscreen,
 
 /* Animation de scintillement pour les scanlines */
 @keyframes scanlines-flicker {
-  0% { opacity: 0.8; }
-  50% { opacity: 0.85; }
-  100% { opacity: 0.8; }
+  0% {
+    opacity: 0.8;
+  }
+  50% {
+    opacity: 0.85;
+  }
+  100% {
+    opacity: 0.8;
+  }
 }
 
 /* Effet de lueur sur le fond */
 body.crt-active-fullscreen {
-  background: radial-gradient(
-    ellipse at center,
-    rgba(0, 40, 0, 0.3) 0%,
-    rgba(0, 0, 0, 1) 100%
-  );
+  background: radial-gradient(ellipse at center, rgba(0, 40, 0, 0.3) 0%, rgba(0, 0, 0, 1) 100%);
 }
 </style>

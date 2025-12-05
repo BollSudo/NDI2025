@@ -1,72 +1,76 @@
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from 'vue';
+import { ref, watch, onUnmounted } from 'vue'
 
 // Définition des props
 interface Props {
-  text: string; // Prend un seul texte à la fois
-  typingSpeed?: number; // Vitesse en ms par caractère
+  text: string // Prend un seul texte à la fois
+  typingSpeed?: number // Vitesse en ms par caractère
 }
 const props = withDefaults(defineProps<Props>(), {
   typingSpeed: 40,
-});
+})
 
 // Définition des événements que ce composant peut émettre
 const emit = defineEmits<{
-  (e: 'finished'): void;
-  (e:'animation-complete'): void;
-}>();
+  (e: 'finished'): void
+  (e: 'animation-complete'): void
+}>()
 
 // État réactif du texte actuellement affiché
-const displayedText = ref('');
+const displayedText = ref('')
 // État pour savoir si la frappe est en cours
-const isTyping = ref(false);
-let typingInterval: number | null = null;
+const isTyping = ref(false)
+let typingInterval: number | null = null
 
 // --- Logique de la Machine à Écrire ---
 
 const typeText = (text: string) => {
   // 1. Réinitialiser et nettoyer
   if (typingInterval !== null) {
-    clearInterval(typingInterval);
+    clearInterval(typingInterval)
   }
-  displayedText.value = '';
-  isTyping.value = true;
-  let i = 0;
+  displayedText.value = ''
+  isTyping.value = true
+  let i = 0
 
   typingInterval = setInterval(() => {
     if (i < text.length) {
       // 2. Ajouter le caractère suivant
-      displayedText.value += text.charAt(i);
-      i++;
+      displayedText.value += text.charAt(i)
+      i++
     } else {
       // 3. Fin de la frappe
       if (typingInterval !== null) {
-        clearInterval(typingInterval);
-        typingInterval = null;
+        clearInterval(typingInterval)
+        typingInterval = null
       }
-      isTyping.value = false;
+      isTyping.value = false
       // 4. Notifier le parent que c'est fini
-      emit('finished');
+      emit('finished')
       emit('animation-complete')
     }
-  }, props.typingSpeed) as unknown as number;
-};
+  }, props.typingSpeed) as unknown as number
+}
 
 // --- Watcher ---
 
 // Si le texte de la prop change, redémarrer l'animation
-watch(() => props.text, (newText) => {
-  if (newText) {
-    typeText(newText);
-  }
-}, { immediate: true });
+watch(
+  () => props.text,
+  (newText) => {
+    if (newText) {
+      typeText(newText)
+    }
+  },
+  { immediate: true },
+)
 
 // Nettoyage lors de la destruction du composant
 onUnmounted(() => {
   if (typingInterval !== null) {
-    clearInterval(typingInterval);
+    clearInterval(typingInterval)
   }
-});
+})
 </script>
 
 <template>
@@ -91,8 +95,13 @@ onUnmounted(() => {
 
 /* L'animation de clignotement pour le curseur */
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .animate-pulse {
