@@ -61,15 +61,20 @@ const handleSubmit = async () => {
 
 <template>
   <div class="chat-container">
-    <div class="messages">
+    <div class="messages flex w-2/3">
       <div
         v-for="(msg, index) in messages.filter((m) => m.role !== 'system')"
         :key="index"
         :class="['message', msg.role]"
       >
         <strong>{{ msg.role === 'assistant' ? 'Chuhrblozz' : msg.role }}:</strong> {{ msg.content }}
+        <div class="img_orc w-1/3">
+
+        </div>
       </div>
+
     </div>
+
 
     <form @submit.prevent="handleSubmit" class="input-form">
       <input
@@ -88,7 +93,7 @@ const handleSubmit = async () => {
 
 <style scoped>
 .chat-container {
-  max-width: 900px;
+  width: 80vw ;
   margin: 0 auto;
   padding: 20px;
   background: linear-gradient(135deg, #1a2c1a 0%, #0d1b0d 100%);
