@@ -35,6 +35,10 @@ security:
           refresh_jwt:
             check_path: gesdinet_jwt_refresh_token
 
+          logout:
+            path: gesdinet_jwt_invalidate_token
+            delete_cookies: [ 'BEARER' ]
+
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
 
