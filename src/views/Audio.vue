@@ -85,7 +85,7 @@ function onPause() {
 function initAudioContext() {
   if (!audioPlayer.value) return;
 
-  audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+  audioContext = new (window.AudioContext || window.webkitAudioContext)();
   analyser = audioContext.createAnalyser();
   source = audioContext.createMediaElementSource(audioPlayer.value);
 
