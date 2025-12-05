@@ -1,20 +1,20 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 
-const router = useRouter();
-const isExpanded = ref(false);
-const isDragging = ref(false);
+const router = useRouter()
+const isExpanded = ref(false)
+const isDragging = ref(false)
 
 const getInitialPosition = () => {
   return router.currentRoute.value.path === '/'
     ? { x: 50, y: 50 } // Centre pour la home
-    : { x: 90, y: 10 }; // Haut droite pour les autres pages
-};
+    : { x: 90, y: 10 } // Haut droite pour les autres pages
+}
 
-const position = ref(getInitialPosition());
-const dragStart = ref({ x: 0, y: 0 });
-const initialPosition = ref(getInitialPosition());
+const position = ref(getInitialPosition())
+const dragStart = ref({ x: 0, y: 0 })
+const initialPosition = ref(getInitialPosition())
 
 const navItems = [
   { id: 1, label: 'ACCUEIL', route: '/', icon: '🏠' },
@@ -22,111 +22,112 @@ const navItems = [
   { id: 3, label: 'GUIDES', route: '/guides', icon: '📖' },
   { id: 4, label: 'RESSOURCES', route: '/ressources', icon: '💎' },
   { id: 5, label: 'COMMUNAUTE', route: '/communaute', icon: '👥' },
-  { id: 6, label: 'PROFIL', route: '/profil', icon: '⚙️' }
-];
+  { id: 6, label: 'PROFIL', route: '/profil', icon: '⚙️' },
+]
 
 const toggleMenu = () => {
   if (!isExpanded.value) {
-    initialPosition.value = { ...position.value };
-    position.value = { x: 50, y: 50 };
+    initialPosition.value = { ...position.value }
+    position.value = { x: 50, y: 50 }
   } else {
-    position.value = { ...initialPosition.value };
+    position.value = { ...initialPosition.value }
   }
-  isExpanded.value = !isExpanded.value;
-};
+  isExpanded.value = !isExpanded.value
+}
 
 const navigateTo = (route: string) => {
-  router.push(route);
-  isExpanded.value = false;
+  router.push(route)
+  isExpanded.value = false
   setTimeout(() => {
-    const newPos = route === '/' ? { x: 50, y: 50 } : { x: 90, y: 10 };
-    position.value = newPos;
-    initialPosition.value = newPos;
-  }, 400);
-};
+    const newPos = route === '/' ? { x: 50, y: 50 } : { x: 90, y: 10 }
+    position.value = newPos
+    initialPosition.value = newPos
+  }, 400)
+}
 
 const startDrag = (e: MouseEvent | TouchEvent) => {
-  if (isExpanded.value) return;
+  if (isExpanded.value) return
 
-  isDragging.value = true;
+  isDragging.value = true
 
-  const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-  const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+  const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+  const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
 
   dragStart.value = {
-    x: clientX - (position.value.x * window.innerWidth / 100),
-    y: clientY - (position.value.y * window.innerHeight / 100)
-  };
-};
+    x: clientX - (position.value.x * window.innerWidth) / 100,
+    y: clientY - (position.value.y * window.innerHeight) / 100,
+  }
+}
 
 const onDrag = (e: MouseEvent | TouchEvent) => {
-  if (!isDragging.value || isExpanded.value) return;
+  if (!isDragging.value || isExpanded.value) return
 
-  e.preventDefault();
+  e.preventDefault()
 
-  const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX;
-  const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY;
+  const clientX = 'touches' in e ? e.touches[0].clientX : e.clientX
+  const clientY = 'touches' in e ? e.touches[0].clientY : e.clientY
 
-  const newX = ((clientX - dragStart.value.x) / window.innerWidth) * 100;
-  const newY = ((clientY - dragStart.value.y) / window.innerHeight) * 100;
+  const newX = ((clientX - dragStart.value.x) / window.innerWidth) * 100
+  const newY = ((clientY - dragStart.value.y) / window.innerHeight) * 100
 
   position.value = {
     x: Math.max(5, Math.min(95, newX)),
-    y: Math.max(5, Math.min(95, newY))
-  };
+    y: Math.max(5, Math.min(95, newY)),
+  }
 
-  initialPosition.value = { ...position.value };
-};
+  initialPosition.value = { ...position.value }
+}
 
 const stopDrag = () => {
-  isDragging.value = false;
-};
+  isDragging.value = false
+}
 
 onMounted(() => {
-  document.addEventListener('mousemove', onDrag);
-  document.addEventListener('mouseup', stopDrag);
-  document.addEventListener('touchmove', onDrag, { passive: false });
-  document.addEventListener('touchend', stopDrag);
-});
+  document.addEventListener('mousemove', onDrag)
+  document.addEventListener('mouseup', stopDrag)
+  document.addEventListener('touchmove', onDrag, { passive: false })
+  document.addEventListener('touchend', stopDrag)
+})
 
 onUnmounted(() => {
-  document.removeEventListener('mousemove', onDrag);
-  document.removeEventListener('mouseup', stopDrag);
-  document.removeEventListener('touchmove', onDrag);
-  document.removeEventListener('touchend', stopDrag);
-});
+  document.removeEventListener('mousemove', onDrag)
+  document.removeEventListener('mouseup', stopDrag)
+  document.removeEventListener('touchmove', onDrag)
+  document.removeEventListener('touchend', stopDrag)
+})
 
 const getRadius = () => {
-  if (typeof window === 'undefined') return 140;
-  const width = window.innerWidth;
-  if (width < 480) return 100;
-  if (width < 768) return 120;
-  return 140;
-};
+  if (typeof window === 'undefined') return 140
+  const width = window.innerWidth
+  if (width < 480) return 100
+  if (width < 768) return 120
+  return 140
+}
 
 const getItemStyle = (index: number, total: number) => {
-  const angle = (index * 360) / total - 90;
-  const r = getRadius();
-  const x = Math.cos((angle * Math.PI) / 180) * r;
-  const y = Math.sin((angle * Math.PI) / 180) * r;
+  const angle = (index * 360) / total - 90
+  const r = getRadius()
+  const x = Math.cos((angle * Math.PI) / 180) * r
+  const y = Math.sin((angle * Math.PI) / 180) * r
 
   return {
     '--delay': `${index * 0.05}s`,
     '--x': `${x}px`,
     '--y': `${y}px`,
-    transform: isExpanded.value
-      ? `translate(${x}px, ${y}px) scale(1)`
-      : 'translate(0, 0) scale(0)',
-    opacity: isExpanded.value ? 1 : 0
-  };
-};
+    transform: isExpanded.value ? `translate(${x}px, ${y}px) scale(1)` : 'translate(0, 0) scale(0)',
+    opacity: isExpanded.value ? 1 : 0,
+  }
+}
 
 const containerStyle = computed(() => ({
   left: `${position.value.x}%`,
   top: `${position.value.y}%`,
   transform: 'translate(-50%, -50%)',
-  transition: isExpanded.value || isDragging.value ? 'none' : 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)'
-}));
+  transition:
+    isExpanded.value || isDragging.value
+      ? 'none'
+      : 'all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55)',
+}))
 </script>
 
 <template>
@@ -134,7 +135,7 @@ const containerStyle = computed(() => ({
     <div
       class="circular-navbar-container pointer-events-auto"
       :style="containerStyle"
-      :class="{ 'dragging': isDragging, 'centered': isExpanded }"
+      :class="{ dragging: isDragging, centered: isExpanded }"
     >
       <transition name="fade">
         <div
@@ -150,7 +151,7 @@ const containerStyle = computed(() => ({
           @touchstart="startDrag"
           @click.stop="toggleMenu"
           class="central-orb"
-          :class="{ 'expanded': isExpanded, 'dragging': isDragging }"
+          :class="{ expanded: isExpanded, dragging: isDragging }"
         >
           <div class="orb-inner">
             <span class="central-icon" :class="{ 'rotate-90': isExpanded }">
@@ -312,8 +313,13 @@ const containerStyle = computed(() => ({
 }
 
 @keyframes glow-pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.6; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 .nav-orb {
