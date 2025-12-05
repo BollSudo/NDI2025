@@ -1,23 +1,30 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 
+import ThreeView from '../views/ThreeView.vue'
+import QuizzView from '@/views/QuizzView.vue'
+import ChatBot from '../views/ChatbotView.vue'
+import AudioView from '../views/AudioView.vue'
+import LegalView from '@/views/LegalView.vue'
+
+const routes = [
+  { path: '/', name: 'home', component: HomeView },
+  {path: '/cours', name: 'cours', component: ThreeView },
+  {path: '/quizz', name: 'quizz', component: QuizzView},
+  {path: '/chatbot', name: 'chatbot', component: ChatBot},
+  {path: '/audio', name: 'audio', component: AudioView},
+  {path: '/legals', name: 'legals', component: LegalView},
+  {path: '/random', name: 'random', redirect: () => {
+      const availableRoutes = routes.filter(r => r.path !== '/random');
+      const randomIndex = Math.floor(Math.random() * availableRoutes.length);
+      return availableRoutes[randomIndex].path;
+    }
+  }
+]
+
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      name: 'home',
-      component: HomeView,
-    },
-    {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
-    },
-  ],
+  history: createWebHistory(),
+  routes,
 })
 
 export default router
