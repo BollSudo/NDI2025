@@ -22,7 +22,7 @@ export default defineConfig({
     host: true,
     port: 5173,
     watch: {
-      usePolling: false,  // Use if editing from Windows File system
+      usePolling: true,  // Use if editing from Windows File system
     },
   },
   base: '/'
