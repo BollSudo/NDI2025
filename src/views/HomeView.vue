@@ -60,6 +60,11 @@ const nextSlide = () => {
   isTyping.value = true
 }
 
+// Nouvelle méthode pour sauter la cinématique
+const skipCinematic = () => {
+  isFinished.value = true;
+};
+
 // --- Gestionnaire d'Événements Clavier ---
 const handleKeyPress = (event: KeyboardEvent) => {
   if (event.code === 'Space') {
@@ -103,6 +108,15 @@ onUnmounted(() => {
       <div
         class="crt-screen w-full max-w-5xl mx-4 md:mx-8 relative p-6 md:p-12 shadow-green-glow min-h-[60vh] flex flex-col justify-between rounded-lg bg-black/90 border border-green-500/30"
       >
+
+        <!-- Bouton pour passer la cinématique -->
+        <button
+          @click="skipCinematic"
+          class="absolute top-2 right-4 text-s font-mono text-yellow-300 hover:text-green-300 transition-colors z-10"
+          aria-label="Passer l'introduction"
+        >
+          [ PASSER ]
+        </button>
         <!-- Section du contenu principal (l'histoire) -->
         <div
           class="intro-text flex-1 flex items-center justify-center text-sm md:text-base lg:text-lg text-center leading-relaxed"

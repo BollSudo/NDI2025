@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Mistral } from '@mistralai/mistralai'
+import CircularNavbar from '@/components/CircularNavbar.vue'
 
 interface Message {
   role: 'system' | 'user' | 'assistant'
@@ -60,6 +61,7 @@ const handleSubmit = async () => {
 </script>
 
 <template>
+  <circular-navbar />
   <div class="chat-container">
     <div class="messages">
       <div
