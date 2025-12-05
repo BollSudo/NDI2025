@@ -22,12 +22,7 @@ onMounted(() => {
   scene = new THREE.Scene()
   scene.background = new THREE.Color('#000000')
 
-  camera = new THREE.PerspectiveCamera(
-    75,
-    window.innerWidth / window.innerHeight,
-    0.1,
-    1000
-  )
+  camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
   camera.position.set(1, 2, 9)
   camera.lookAt(0, 0, 0)
 
@@ -54,7 +49,6 @@ onMounted(() => {
   controls.minPolarAngle = Math.PI / 2 - verticalLimit
   controls.maxPolarAngle = Math.PI / 2 - 0.1
 
-
   const loader = new GLTFLoader()
   loader.load(
     '/assets/models/computers.glb',
@@ -63,13 +57,12 @@ onMounted(() => {
       console.log('Model loaded:', gltf)
     },
     (progress) => {
-      console.log(`Loading: ${(progress.loaded / progress.total * 100)}%`)
+      console.log(`Loading: ${(progress.loaded / progress.total) * 100}%`)
     },
     (error) => {
       console.error('Error loading model:', error)
-    }
+    },
   )
-
 
   animate()
   window.addEventListener('resize', onResize)
@@ -116,11 +109,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="relative bg-black w-full h-screen">
-    <div
-      v-show="!showNextComponent"
-      ref="container"
-      class="w-full h-full"
-    ></div>
+    <div v-show="!showNextComponent" ref="container" class="w-full h-full"></div>
 
     <button
       v-if="!showNextComponent"
@@ -131,8 +120,20 @@ onBeforeUnmount(() => {
       <span v-if="!isZooming">Explorer</span>
       <span v-else class="flex items-center gap-2">
         <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" fill="none"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+            fill="none"
+          ></circle>
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+          ></path>
         </svg>
         Chargement...
       </span>

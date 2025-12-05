@@ -1,5 +1,4 @@
 <script setup lang="ts">
-
 import ComputersModel from '@/components/ComputersModel.vue'
 </script>
 
@@ -9,6 +8,4 @@ import ComputersModel from '@/components/ComputersModel.vue'
   </div>
 </template>
 
-<style scoped>
-
-</style>
+<style scoped></style>

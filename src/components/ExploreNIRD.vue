@@ -1,12 +1,16 @@
 <template>
-  <div class="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white flex flex-col gap-2 items-center justify-center">
-
+  <div
+    class="min-h-screen w-full overflow-x-hidden bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white flex flex-col gap-2 items-center justify-center"
+  >
     <section id="pillars" class="w-full min-h-screen pt-12">
       <div class="container px-6">
         <h2 class="text-4xl font-bold text-center mb-16">Les piliers</h2>
         <div class="grid md:grid-cols-3 gap-8">
-          <div v-for="(pillar, index) in pillars" :key="index"
-               class="bg-white/5 backdrop-blur-lg rounded-2xl transition-all duration-300 ease-out cursor-pointer hover:bg-white/10 hover:shadow-xl hover:border-white/20 transition-eas" >
+          <div
+            v-for="(pillar, index) in pillars"
+            :key="index"
+            class="bg-white/5 backdrop-blur-lg rounded-2xl transition-all duration-300 ease-out cursor-pointer hover:bg-white/10 hover:shadow-xl hover:border-white/20 transition-eas"
+          >
             <InfoCard :pillar="pillar" />
           </div>
         </div>
@@ -23,17 +27,19 @@
             class="bg-gradient-to-br from-slate-800/50 to-slate-900/50 backdrop-blur rounded-xl p-6 border border-white/10 hover:border-blue-500/50 transition-all hover:transform cursor-pointer group"
           >
             <div class="flex w-full items-start justify-between mb-4">
-              <component
-                :is="solution.icon"
-                class="text-3xl text-blue-400"
-                size="32"
-              />
-              <span class="px-3 py-1 rounded-full text-xs font-semibold"
-                    :class="solution.difficulty === 'Facile' ? 'bg-green-500/20 text-green-400' :
-                solution.difficulty === 'Moyen' ? 'bg-yellow-500/20 text-yellow-400' :
-                'bg-red-500/20 text-red-400'">
-              {{ solution.difficulty }}
-            </span>
+              <component :is="solution.icon" class="text-3xl text-blue-400" size="32" />
+              <span
+                class="px-3 py-1 rounded-full text-xs font-semibold"
+                :class="
+                  solution.difficulty === 'Facile'
+                    ? 'bg-green-500/20 text-green-400'
+                    : solution.difficulty === 'Moyen'
+                      ? 'bg-yellow-500/20 text-yellow-400'
+                      : 'bg-red-500/20 text-red-400'
+                "
+              >
+                {{ solution.difficulty }}
+              </span>
             </div>
             <h3 class="text-xl font-bold mb-2 group-hover:text-blue-400 transition-colors">
               {{ solution.title }}
@@ -67,17 +73,16 @@ import {
   Server,
   SmartphoneDevice,
   GraduationCap,
-} from '@iconoir/vue';
-
+} from '@iconoir/vue'
 
 const solutions = ref([
   {
     icon: LaptopDevMode,
     title: 'Migration vers Linux',
-    description: 'Installer un système libre sur les ordinateurs de l\'établissement',
+    description: "Installer un système libre sur les ordinateurs de l'établissement",
     difficulty: 'Moyen',
     impact: 'Élevé',
-    duration: '2-3 mois'
+    duration: '2-3 mois',
   },
   {
     icon: Wrench,
@@ -85,7 +90,7 @@ const solutions = ref([
     description: 'Former les élèves à réparer et reconditionner du matériel',
     difficulty: 'Facile',
     impact: 'Élevé',
-    duration: '1 mois'
+    duration: '1 mois',
   },
   {
     icon: BookStack,
@@ -93,15 +98,15 @@ const solutions = ref([
     description: 'Remplacer les suites propriétaires (LibreOffice, GIMP...)',
     difficulty: 'Facile',
     impact: 'Moyen',
-    duration: '2 semaines'
+    duration: '2 semaines',
   },
   {
     icon: Server,
     title: 'Serveur local',
-    description: 'Héberger les données de l\'établissement en local',
+    description: "Héberger les données de l'établissement en local",
     difficulty: 'Avancé',
     impact: 'Élevé',
-    duration: '3-6 mois'
+    duration: '3-6 mois',
   },
   {
     icon: SmartphoneDevice,
@@ -109,7 +114,7 @@ const solutions = ref([
     description: 'Utiliser des alternatives libres (Nextcloud, Jitsi...)',
     difficulty: 'Facile',
     impact: 'Moyen',
-    duration: '1 mois'
+    duration: '1 mois',
   },
   {
     icon: GraduationCap,
@@ -117,17 +122,9 @@ const solutions = ref([
     description: 'Workshops réguliers sur les outils libres',
     difficulty: 'Facile',
     impact: 'Élevé',
-    duration: 'Continu'
-  }
+    duration: 'Continu',
+  },
 ])
-
 </script>
 
-<style scoped>
-.bg-grid-pattern {
-  background-image:
-    linear-gradient(to right, rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-size: 50px 50px;
-}
-</style>
+<style scoped></style>

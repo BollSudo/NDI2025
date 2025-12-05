@@ -8,7 +8,6 @@ import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
-
 interface Props {
   modelPath: string
   rotationSpeed?: number
@@ -20,7 +19,7 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   rotationSpeed: 0.01,
   autoRotate: true,
-  cameraPosition: () => [0, 0, 4]
+  cameraPosition: () => [0, 0, 4],
 })
 
 const container = ref<HTMLDivElement>()
@@ -48,14 +47,14 @@ function initScene() {
     45,
     container.value!.clientWidth / container.value!.clientHeight,
     0.1,
-    1000
+    1000,
   )
   camera.position.set(...props.cameraPosition)
 
   // Renderer
   renderer = new THREE.WebGLRenderer({
     antialias: true,
-    alpha: true
+    alpha: true,
   })
   renderer.setSize(container.value!.clientWidth, container.value!.clientHeight)
   renderer.setPixelRatio(window.devicePixelRatio)
@@ -116,7 +115,7 @@ function loadModel() {
     },
     (error) => {
       console.error('Error loading model:', error)
-    }
+    },
   )
 }
 
